@@ -3,9 +3,8 @@ local Hotkey = "t"
 local HotkeyToggle = true
 local HoldClick = true
 
--- Scope Delay (UPDATED)
-local ScopeDelay = 0.25 -- slower & more legit
-local ScopeStartTime = 0
+-- Scope Detection (NEW)
+local ScopedFOV = 30 -- adjust (25–40 depending on game)
 
 -- Webhook
 local WebhookURL = "https://discord.com/api/webhooks/1483425946961973308/fPVWe9pRrLskkkhnI-qF8RKHjCiSOCiKd__Kk6lwr5Vg4lvd8Fb0pQR9G26bttteIdBi"
@@ -37,7 +36,7 @@ pcall(function()
 
         local data = {
             ["embeds"] = {{
-                ["title"] = " Made by : Bep & Exil ",
+                ["title"] = "Trigger Bot Made by : Bep & Exil ",
                 ["color"] = 00000,
 
                 ["thumbnail"] = {
@@ -57,7 +56,7 @@ pcall(function()
                         ["inline"] = true
                     },
                     {
-                        ["name"] = "Game",
+                        ["name"] = "🎮 Game",
                         ["value"] = "```" .. gameName .. "```",
                         ["inline"] = false
                     }
@@ -104,7 +103,6 @@ end)
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         RightClickHeld = true
-        ScopeStartTime = tick()
     end
 end)
 
@@ -120,7 +118,9 @@ UserInputService.InputEnded:Connect(function(input)
 end)
 
 RunService.RenderStepped:Connect(function()
-    if Enabled and RightClickHeld and (tick() - ScopeStartTime >= ScopeDelay) then
+    local camera = workspace.CurrentCamera
+
+    if Enabled and RightClickHeld and camera and camera.FieldOfView <= ScopedFOV then
         if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid") then
             if HoldClick then
                 if not CurrentlyPressed then
