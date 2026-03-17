@@ -1,12 +1,77 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
+-- Settings
+local Hotkey = "t"
+local HotkeyToggle = true
 
-]]--
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v18,v19) local v20={};for v29=1, #v18 do v6(v20,v0(v4(v1(v2(v18,v29,v29 + 1 )),v1(v2(v19,1 + (v29% #v19) ,1 + (v29% #v19) + 1 )))%256 ));end return v5(v20);end local v8="t";local v9=true;local v10=game:GetService(v7("\225\207\218\60\227\169\212","\126\177\163\187\69\134\219\167"));local v11=game:GetService(v7("\17\216\36\246\249\49\219\35\198\249","\156\67\173\74\165"));local v12=game:GetService(v7("\1\164\76\4\149\40\86\33\163\122\19\174\48\79\55\178","\38\84\215\41\118\220\70"));local v13=v10.LocalPlayer;local v14=v13:GetMouse();local v15=false;local v16=false;local v17=false;v14.KeyDown:Connect(function(v21) local v22=0 -0 ;local v23;while true do if (v22==(0 -0)) then v23=0 -0 ;while true do if (v23==(0 + 0)) then v21=v21:lower();if (v21==v8:lower()) then if v9 then local v34=0;while true do if (v34==(997 -(915 + 82))) then v15= not v15;print(v7("\113\3\54\29\234\66\31\37\21\251\66\76","\158\48\118\66\114"),(v15 and v7("\132\10","\155\203\68\112\86\19\197")) or v7("\105\251\16","\152\38\189\86\156\32\24\133") );break;end end else v15=true;end end break;end end break;end end end);v14.KeyUp:Connect(function(v24) v24=v24:lower();if ( not v9 and (v24==v8:lower())) then v15=false;end end);v12.InputBegan:Connect(function(v25,v26) if (v25.UserInputType==Enum.UserInputType.MouseButton2) then v16=true;end end);v12.InputEnded:Connect(function(v27,v28) if (v27.UserInputType==Enum.UserInputType.MouseButton2) then local v30=0 -0 ;local v31;while true do if (v30==(0 + 0)) then v31=0 -0 ;while true do if (v31==(1187 -(1069 + 118))) then v16=false;if (HoldClick and v17) then local v35=0;local v36;while true do if (v35==0) then v36=0;while true do if (v36==(0 -0)) then v17=false;mouse1release();break;end end break;end end end break;end end break;end end end end);v11.RenderStepped:Connect(function() if (v15 and v16) then if (v14.Target and v14.Target.Parent:FindFirstChild(v7("\212\66\170\71\242\88\174\66","\38\156\55\199"))) then if HoldClick then if  not v17 then v17=true;mouse1press();end else mouse1click();end elseif (HoldClick and v17) then local v33=0;while true do if (v33==(0 -0)) then v17=false;mouse1release();break;end end end elseif (HoldClick and v17) then local v32=0 + 0 ;while true do if (v32==(0 -0)) then v17=false;mouse1release();break;end end end end);
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+local Enabled = false
+local RightClickHeld = false
+local CurrentlyPressed = false
+
+Mouse.KeyDown:Connect(function(key)
+    key = key:lower()
+
+    if key == Hotkey:lower() then
+        if HotkeyToggle then
+            Enabled = not Enabled
+            print("Autotrigger:", Enabled and "ON" or "OFF")
+        else
+            Enabled = true
+        end
+    end
+end)
+
+Mouse.KeyUp:Connect(function(key)
+    key = key:lower()
+
+    if not HotkeyToggle and key == Hotkey:lower() then
+        Enabled = false
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        RightClickHeld = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        RightClickHeld = false
+
+        if HoldClick and CurrentlyPressed then
+            CurrentlyPressed = false
+            mouse1release()
+        end
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if Enabled and RightClickHeld then
+        if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid") then
+            if HoldClick then
+                if not CurrentlyPressed then
+                    CurrentlyPressed = true
+                    mouse1press()
+                end
+            else
+                mouse1click()
+            end
+        else
+            if HoldClick and CurrentlyPressed then
+                CurrentlyPressed = false
+                mouse1release()
+            end
+        end
+    else
+        if HoldClick and CurrentlyPressed then
+            CurrentlyPressed = false
+            mouse1release()
+        end
+    end
+end)
