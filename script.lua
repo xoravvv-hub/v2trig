@@ -4,7 +4,7 @@ local HotkeyToggle = true
 local HoldClick = true
 
 -- Scope Delay
-local ScopeDelay = 0.25
+local ScopeDelay = 0.24
 local ScopeStartTime = 0
 
 -- Webhook
