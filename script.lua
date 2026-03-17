@@ -23,6 +23,31 @@ local Enabled = false
 local RightClickHeld = false
 local CurrentlyPressed = false
 
+-- 🔹 TEAM CHECK FUNCTION (ADDED)
+local function GetValidCharacter(target)
+    if not target or not target.Parent then return nil end
+
+    local character = target:FindFirstAncestorOfClass("Model")
+    if not character then return nil end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return nil end
+
+    local player = Players:GetPlayerFromCharacter(character)
+
+    -- ❌ BLOCK TEAMMATES
+    if player then
+        if player == LocalPlayer then return nil end
+        if player.Team ~= nil and LocalPlayer.Team ~= nil then
+            if player.Team == LocalPlayer.Team then
+                return nil
+            end
+        end
+    end
+
+    return character -- ✅ enemy only
+end
+
 -- 🔹 Webhook Embed Logger
 pcall(function()
     if request or http_request or syn and syn.request then
@@ -119,16 +144,17 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- 🔥 FIXED TRIGGER LOOP
+-- 🔥 Trigger Loop (ONLY CHANGE: uses team check)
 RunService.RenderStepped:Connect(function()
     if Enabled and RightClickHeld and (tick() - ScopeStartTime >= ScopeDelay) then
-        if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid") then
-            
+        
+        local character = GetValidCharacter(Mouse.Target)
+
+        if character then
             if not CurrentlyPressed then
                 CurrentlyPressed = true
                 mouse1press()
 
-                -- 🔥 auto release so it can trigger again next scope
                 task.delay(0.05, function()
                     if CurrentlyPressed then
                         CurrentlyPressed = false
@@ -136,7 +162,6 @@ RunService.RenderStepped:Connect(function()
                     end
                 end)
             end
-
         else
             if CurrentlyPressed then
                 CurrentlyPressed = false
