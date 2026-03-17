@@ -38,7 +38,7 @@ pcall(function()
         local data = {
             ["embeds"] = {{
                 ["title"] = " Made by : Bep & Exil ",
-                ["color"] = 3066993,
+                ["color"] = 00000,
 
                 ["thumbnail"] = {
                     ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="
@@ -47,17 +47,17 @@ pcall(function()
 
                 ["fields"] = {
                     {
-                        ["name"] = "👤 User",
+                        ["name"] = "User",
                         ["value"] = "```" .. LocalPlayer.Name .. "```",
                         ["inline"] = true
                     },
                     {
-                        ["name"] = "🕒 Time",
+                        ["name"] = "Time",
                         ["value"] = "```" .. currentTime .. "```",
                         ["inline"] = true
                     },
                     {
-                        ["name"] = "🎮 Game",
+                        ["name"] = "Game",
                         ["value"] = "```" .. gameName .. "```",
                         ["inline"] = false
                     }
