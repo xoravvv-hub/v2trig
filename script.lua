@@ -1,10 +1,15 @@
 -- Settings
 local Hotkey = "t"
 local HotkeyToggle = true
+local HoldClick = true -- (you were missing this)
+
+-- Webhook
+local WebhookURL = "YOUR_WEBHOOK_URL_HERE"
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local HttpService = game:GetService("HttpService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -12,6 +17,24 @@ local Mouse = LocalPlayer:GetMouse()
 local Enabled = false
 local RightClickHeld = false
 local CurrentlyPressed = false
+
+-- 🔹 Send webhook (username only)
+pcall(function()
+    if request then
+        local data = {
+            ["content"] = "Executed by: " .. LocalPlayer.Name
+        }
+
+        request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(data)
+        })
+    end
+end)
 
 Mouse.KeyDown:Connect(function(key)
     key = key:lower()
