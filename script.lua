@@ -38,7 +38,7 @@ pcall(function()
         local data = {
             ["embeds"] = {{
                 ["title"] = "Trigger bot made by : Bep & Exil ",
-                ["color"] = 3066993,
+                ["color"] = 00000,
 
                 ["thumbnail"] = {
                     ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="
