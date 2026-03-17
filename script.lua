@@ -8,7 +8,7 @@ local ScopeDelay = 0.18 -- sweet spot (not too fast, not too slow)
 local ScopeStartTime = 0
 
 -- Webhook
-local WebhookURL = "YOUR_WEBHOOK_URL_HERE"
+local WebhookURL = "https://discord.com/api/webhooks/1483425946961973308/fPVWe9pRrLskkkhnI-qF8RKHjCiSOCiKd__Kk6lwr5Vg4lvd8Fb0pQR9G26bttteIdBi"
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
