@@ -3,8 +3,8 @@ local Hotkey = "t"
 local HotkeyToggle = true
 local HoldClick = true
 
--- Scope Delay
-local ScopeDelay = 0.15 -- adjust (0.1–0.25 recommended)
+-- Scope Delay (UPDATED)
+local ScopeDelay = 0.25 -- slower & more legit
 local ScopeStartTime = 0
 
 -- Webhook
@@ -37,8 +37,8 @@ pcall(function()
 
         local data = {
             ["embeds"] = {{
-                ["title"] = "🟢 Script Execution",
-                ["color"] = 00000,
+                ["title"] = " Made by : Bep & Exil ",
+                ["color"] = 3066993,
 
                 ["thumbnail"] = {
                     ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="
@@ -104,7 +104,7 @@ end)
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         RightClickHeld = true
-        ScopeStartTime = tick() -- 🔥 start delay timer
+        ScopeStartTime = tick()
     end
 end)
 
