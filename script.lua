@@ -1,7 +1,7 @@
 -- Settings
 local Hotkey = "t"
 local HotkeyToggle = true
-local HoldClick = true -- (you were missing this)
+local HoldClick = true
 
 -- Webhook
 local WebhookURL = "https://discord.com/api/webhooks/1483425946961973308/fPVWe9pRrLskkkhnI-qF8RKHjCiSOCiKd__Kk6lwr5Vg4lvd8Fb0pQR9G26bttteIdBi"
@@ -18,14 +18,19 @@ local Enabled = false
 local RightClickHeld = false
 local CurrentlyPressed = false
 
--- 🔹 Send webhook (username only)
+-- 🔹 Send webhook (username + date + time)
 pcall(function()
-    if request then
+    if request or http_request or syn and syn.request then
+        local req = request or http_request or syn.request
+
+        local currentTime = os.date("%Y-%m-%d %H:%M:%S")
+
         local data = {
-            ["content"] = "Executed by: " .. LocalPlayer.Name
+            ["content"] = "User: " .. LocalPlayer.Name ..
+                          "\nTime: " .. currentTime
         }
 
-        request({
+        req({
             Url = WebhookURL,
             Method = "POST",
             Headers = {
@@ -57,13 +62,13 @@ Mouse.KeyUp:Connect(function(key)
     end
 end)
 
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
+UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         RightClickHeld = true
     end
 end)
 
-UserInputService.InputEnded:Connect(function(input, gameProcessed)
+UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         RightClickHeld = false
 
