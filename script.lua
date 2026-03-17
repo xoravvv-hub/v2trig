@@ -3,11 +3,12 @@ local Hotkey = "t"
 local HotkeyToggle = true
 local HoldClick = true
 
--- Scope Detection (NEW)
-local ScopedFOV = 30 -- adjust (25–40 depending on game)
+-- Scope Delay (FIXED HYBRID)
+local ScopeDelay = 0.18 -- sweet spot (not too fast, not too slow)
+local ScopeStartTime = 0
 
 -- Webhook
-local WebhookURL = "https://discord.com/api/webhooks/1483425946961973308/fPVWe9pRrLskkkhnI-qF8RKHjCiSOCiKd__Kk6lwr5Vg4lvd8Fb0pQR9G26bttteIdBi"
+local WebhookURL = "YOUR_WEBHOOK_URL_HERE"
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -36,8 +37,8 @@ pcall(function()
 
         local data = {
             ["embeds"] = {{
-                ["title"] = "Trigger Bot Made by : Bep & Exil ",
-                ["color"] = 00000,
+                ["title"] = "Made by : Bep & Exil ",
+                ["color"] = 0000,
 
                 ["thumbnail"] = {
                     ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="
@@ -56,14 +57,14 @@ pcall(function()
                         ["inline"] = true
                     },
                     {
-                        ["name"] = "🎮 Game",
+                        ["name"] = "Game",
                         ["value"] = "```" .. gameName .. "```",
                         ["inline"] = false
                     }
                 },
 
                 ["footer"] = {
-                    ["text"] = "Execution Logger"
+                    ["text"] = "WE RUN 404"
                 }
             }}
         }
@@ -103,6 +104,7 @@ end)
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
         RightClickHeld = true
+        ScopeStartTime = tick() -- start delay
     end
 end)
 
@@ -118,9 +120,7 @@ UserInputService.InputEnded:Connect(function(input)
 end)
 
 RunService.RenderStepped:Connect(function()
-    local camera = workspace.CurrentCamera
-
-    if Enabled and RightClickHeld and camera and camera.FieldOfView <= ScopedFOV then
+    if Enabled and RightClickHeld and (tick() - ScopeStartTime >= ScopeDelay) then
         if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid") then
             if HoldClick then
                 if not CurrentlyPressed then
